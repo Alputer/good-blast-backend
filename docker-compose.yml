@@ -11,7 +11,7 @@ services:
     ports:
       - '3000:3000'
     env_file:
-      - .env.dev
+      - dev.env
 
   app-prod:
     build:
@@ -20,4 +20,4 @@ services:
     ports:
       - '80:3000'
     env_file:
-      - .env
+      - prod.env

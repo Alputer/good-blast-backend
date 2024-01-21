@@ -17,8 +17,8 @@ async function bootstrap() {
   const swaggerEnabled = configService.get('SWAGGER_ENABLE') !== 'false';
   if (swaggerEnabled) {
     const config = new DocumentBuilder()
-      .setTitle('Scouthub API Admin Gateway')
-      .setDescription('Scouthub API Admin Gateway Documentation')
+      .setTitle('Good Blast API')
+      .setDescription('Good Blast API Documentation')
       .setVersion('1.0')
       .addBearerAuth()
       .build();

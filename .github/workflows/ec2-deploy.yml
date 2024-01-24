@@ -24,5 +24,5 @@ jobs:
           EXCLUDE: prod.env
           SCRIPT_AFTER: |
             cd ${{ secrets.TARGET_DIR }}
-            docker-compose up -d --build
+            docker-compose up app-prod -d --build
             docker system prune -af

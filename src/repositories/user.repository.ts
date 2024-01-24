@@ -104,12 +104,13 @@ export class UserRepository {
         BOOL: Boolean(data.claimedReward),
       },
       createdAt: {
-        N: String(data.createdAt.getTime()),
+        S: data.createdAt,
       },
       updatedAt: {
-        N: String(data.createdAt.getTime()),
+        S: data.updatedAt,
       },
     };
+
     const command = new PutItemCommand({
       TableName: this.tableName,
       Item: itemObject,

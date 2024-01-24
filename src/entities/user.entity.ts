@@ -12,8 +12,8 @@ export class User {
   levelAndUsername: string; // Used for second GSI for ensuring uniqueness
   currGroupId: number;
   claimedReward: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 
   static async newInstanceFromDTO(data: RegisterDto) {
     const result = new User();
@@ -25,7 +25,7 @@ export class User {
     result.currGroupId = -1;
     result.levelAndUsername = `0000001#${data.username}`;
     result.claimedReward = true;
-    const currentTime = new Date();
+    const currentTime = new Date().toISOString();
     result.createdAt = currentTime;
     result.updatedAt = currentTime;
 
@@ -42,8 +42,8 @@ export class User {
     result.levelAndUsername = data.levelAndUsername.S;
     result.currGroupId = data.currGroupId.N;
     result.claimedReward = data.claimedReward.BOOL;
-    result.createdAt = new Date(Number(data.createdAt.N));
-    result.updatedAt = new Date(Number(data.updatedAt.N));
+    result.createdAt = data.createdAt.S;
+    result.updatedAt = data.updatedAt.S;
 
     return result;
   }

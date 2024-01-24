@@ -8,6 +8,7 @@ import {
 } from './controllers';
 import { AuthService, UserService } from './services';
 import { UserRepository } from './repositories';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserRepository } from './repositories';
         expiresIn: process.env.JWT_EXPIRES_IN,
       },
     }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [HealthController, AuthController, UserController],
   providers: [AuthService, UserService, UserRepository],

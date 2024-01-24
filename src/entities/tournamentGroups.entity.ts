@@ -7,7 +7,7 @@ export class TournamentGroup {
   tournamentId: string;
   tournamentScore: number;
 
-  static newInstanceFromDynamoDBObject(data: any): TournamentGroup {
+  public static newInstanceFromDynamoDBObject(data: any): TournamentGroup {
     const result = new TournamentGroup();
     result.groupId = data.groupId.S;
     result.username = data.username.S;

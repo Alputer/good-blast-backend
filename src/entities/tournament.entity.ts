@@ -1,45 +1,34 @@
-import { RegisterDto } from '../dtos/auth';
+import { IsOngoing } from 'src/enums';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Tournament {
   id: string;
   startTime: string;
-  endTime: string;
-  isOngoing: boolean;
+  duration: number; // in seconds
+  isOngoing: IsOngoing; // it is string to supply it as GSI.
 
-  static newInstance() {
+  public static newInstance() {
     const result = new Tournament();
     result.id = uuidv4();
-    const { currentTimeUTC, timeAfter24HoursUTC } =
-      result.getCurrentAndFutureTimeUTC();
-    result.startTime = currentTimeUTC;
-    result.endTime = timeAfter24HoursUTC;
-    result.isOngoing = true;
+    result.startTime = result.getCurrentTimeUTC();
+    result.duration = 60 * 60 * 24;
+    result.isOngoing = IsOngoing.TRUE;
 
     return result;
   }
 
-  static newInstanceFromDynamoDBObject(data: any): Tournament {
+  public static newInstanceFromDynamoDBObject(data: any): Tournament {
     const result = new Tournament();
     result.id = data.id.S;
     result.startTime = data.startTime.S;
-    result.endTime = data.endTime.S;
-    result.isOngoing = data.isOngoing.BOOL;
+    result.duration = data.duration.N;
+    result.isOngoing = data.isOngoing.S;
 
     return result;
   }
 
-  getCurrentAndFutureTimeUTC(): {
-    currentTimeUTC: string;
-    timeAfter24HoursUTC: string;
-  } {
+  private getCurrentTimeUTC(): string {
     const currentDate = new Date();
-    const currentTimeUTC = currentDate.toISOString();
-    const timeAfter24Hours = new Date(
-      currentDate.getTime() + 24 * 60 * 60 * 1000,
-    );
-    const timeAfter24HoursUTC = timeAfter24Hours.toISOString();
-
-    return { currentTimeUTC, timeAfter24HoursUTC };
+    return currentDate.toISOString();
   }
 }

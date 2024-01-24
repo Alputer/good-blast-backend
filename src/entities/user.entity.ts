@@ -15,7 +15,7 @@ export class User {
   createdAt: string;
   updatedAt: string;
 
-  static async newInstanceFromDTO(data: RegisterDto) {
+  public static async newInstanceFromDTO(data: RegisterDto) {
     const result = new User();
     result.username = data.username;
     result.password = await result.getEncryptedPassword(data.password);
@@ -32,7 +32,7 @@ export class User {
     return result;
   }
 
-  static newInstanceFromDynamoDBObject(data: any): User {
+  public static newInstanceFromDynamoDBObject(data: any): User {
     const result = new User();
     result.username = data.username.S;
     result.password = data.password.S;
@@ -48,11 +48,11 @@ export class User {
     return result;
   }
 
-  async getEncryptedPassword(password: string): Promise<string> {
+  public async getEncryptedPassword(password: string): Promise<string> {
     return bcrypt.hash(password, SALT_ROUNDS);
   }
 
-  async compareEncryptedPassword(password: string): Promise<boolean> {
+  public async compareEncryptedPassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
   }
 }

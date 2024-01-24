@@ -6,8 +6,8 @@ import {
   HealthController,
   UserController,
 } from './controllers';
-import { AuthService, UserService } from './services';
-import { UserRepository } from './repositories';
+import { AuthService, UserService, TournamentService } from './services';
+import { TournamentRepository, UserRepository } from './repositories';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -25,6 +25,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
   ],
   controllers: [HealthController, AuthController, UserController],
-  providers: [AuthService, UserService, UserRepository],
+  providers: [AuthService, UserService, TournamentService, UserRepository, TournamentRepository],
 })
 export class AppModule {}

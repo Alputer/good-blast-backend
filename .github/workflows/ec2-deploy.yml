@@ -21,7 +21,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
           ARGS: --delete
-          EXCLUDE: prod.env dev.env
+          EXCLUDE: prod.env, dev.env
           SCRIPT_AFTER: |
             cd ${{ secrets.TARGET_DIR }}
             sudo docker-compose up -d --build app-prod

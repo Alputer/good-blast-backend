@@ -1,6 +1,13 @@
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
-import { HealthController } from './controllers';
+import { JwtModule } from '@nestjs/jwt';
+import {
+  AuthController,
+  HealthController,
+  UserController,
+} from './controllers';
+import { AuthService, UserService } from './services';
+import { UserRepository } from './repositories';
 
 @Module({
   imports: [
@@ -8,8 +15,14 @@ import { HealthController } from './controllers';
       envFilePath:
         process.env.NODE_ENV === 'production' ? '../prod.env' : '../dev.env',
     }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      },
+    }),
   ],
-  controllers: [HealthController],
-  providers: [],
+  controllers: [HealthController, AuthController, UserController],
+  providers: [AuthService, UserService, UserRepository],
 })
 export class AppModule {}

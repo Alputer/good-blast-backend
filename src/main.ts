@@ -7,6 +7,7 @@ import {
 import helmet from '@fastify/helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -30,6 +31,7 @@ async function bootstrap() {
   app.register(helmet, {
     contentSecurityPolicy: false,
   });
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(configService.get('PORT'), '0.0.0.0');
 }
 bootstrap();

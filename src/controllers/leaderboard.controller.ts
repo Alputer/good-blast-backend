@@ -10,7 +10,26 @@ import { LeaderboardService } from '../services';
 export class LeaderboardController {
   constructor(private readonly leaderboardService: LeaderboardService) {}
 
-
+  @UseGuards(AuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Leaderboard of user\'s group returned successfullys is returned successfully.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'You are not authenticated.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error, contact with backend team.',
+  })
+  @Get('/tournament')
+  public async getTournamentLeaderboard(
+    @Req() req: IAuthorizedRequest,
+  ): Promise<number> {
+    const user = req.user;
+    return await this.leaderboardService.getTournamentLeaderboard(user.username);
+  }
   
   @UseGuards(AuthGuard)
   @ApiResponse({

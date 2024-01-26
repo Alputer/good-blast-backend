@@ -10,6 +10,18 @@ export class LeaderboardService {
     public readonly userRepository: UserRepository,
   ) {}
 
+  public async getTournamentLeaderboard(username: string) {
+    const user = await this.userRepository.findUserByUsername(username);
+
+    const membersSorted =
+      await this.tournamentGroupRepository.getGroupMembersByGroupId(
+        user.currGroupId,
+        SortOption.DESC,
+      );
+
+    return membersSorted;
+  }
+
   public async getRankOfUserByUsername(username: string): Promise<number> {
     const user = await this.userRepository.findUserByUsername(username);
 

@@ -4,11 +4,21 @@ import { JwtModule } from '@nestjs/jwt';
 import {
   AuthController,
   HealthController,
+  LeaderboardController,
   TournamentController,
   UserController,
 } from './controllers';
-import { AuthService, UserService, TournamentService } from './services';
-import { TournamentGroupRepository, TournamentRepository, UserRepository } from './repositories';
+import {
+  AuthService,
+  UserService,
+  TournamentService,
+  LeaderboardService,
+} from './services';
+import {
+  UserRepository,
+  TournamentRepository,
+  TournamentGroupRepository,
+} from './repositories';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -25,7 +35,21 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     ScheduleModule.forRoot(),
   ],
-  controllers: [HealthController, AuthController, UserController, TournamentController],
-  providers: [AuthService, UserService, TournamentService, UserRepository, TournamentRepository, TournamentGroupRepository],
+  controllers: [
+    HealthController,
+    AuthController,
+    UserController,
+    TournamentController,
+    LeaderboardController,
+  ],
+  providers: [
+    AuthService,
+    UserService,
+    TournamentService,
+    LeaderboardService,
+    UserRepository,
+    TournamentRepository,
+    TournamentGroupRepository,
+  ],
 })
 export class AppModule {}

@@ -10,7 +10,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TournamentGroup } from '../entities';
 import { TournamentRepository } from './tournament.repository';
-import { IsOngoing } from '../enums';
+import { IsOngoing, SortOption } from '../enums';
 import { UserRepository } from './user.repository';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -48,6 +48,44 @@ export class TournamentGroupRepository {
     });
     const result = await this.client.send(queryCommand);
     return result;
+  }
+
+  public async getGroupMembersByGroupId(
+    groupId: string,
+    sortOption: SortOption,
+  ): Promise<any> {
+    const queryCommand = new QueryCommand({
+      TableName: this.tableName,
+      KeyConditionExpression: 'groupId = :groupId',
+      ExpressionAttributeValues: {
+        ':groupId': { S: groupId },
+      },
+      ProjectionExpression: 'groupId, username, tournamentScore',
+    });
+
+    try {
+      const queryResult = await this.client.send(queryCommand);
+
+      if (queryResult.Items && queryResult.Items.length > 0) {
+        const result = queryResult.Items.map((item) =>
+          TournamentGroup.newInstanceFromDynamoDBObjectWithoutTournamentId(
+            item,
+          ),
+        );
+        if (sortOption === SortOption.NO_SORT) return result;
+        if (sortOption === SortOption.DESC)
+          return result.sort((a, b) => a.tournamentScore - b.tournamentScore);
+        if (sortOption === SortOption.ASC)
+          return result.sort((a, b) => b.tournamentScore - a.tournamentScore);
+      }
+
+      return undefined;
+    } catch (error) {
+      console.error('Error finding group members with group id:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in getGroupMembersByGroupId query',
+      );
+    }
   }
 
   public async findTournamentGroupByGroupId(
@@ -113,11 +151,11 @@ export class TournamentGroupRepository {
               username: { S: data.username },
             },
             UpdateExpression:
-              'SET groupId = :newGroupId, claimedReward = :claimedRewardVal, joinedTournamentAt = :joinedTournamentAtVal',
+              'SET currGroupId = :newGroupId, claimedReward = :claimedRewardVal, joinedTournamentAt = :joinedTournamentAtVal',
             ExpressionAttributeValues: {
               ':newGroupId': { S: data.groupId },
               ':claimedRewardVal': { BOOL: false },
-              ':joinedTournamentAtVal': { S: new Date().toISOString()},
+              ':joinedTournamentAtVal': { S: new Date().toISOString() },
             },
           },
         },

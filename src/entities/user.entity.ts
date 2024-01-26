@@ -37,7 +37,7 @@ export class User {
     result.coins = data.coins.N;
     result.level = data.level.N;
     result.levelAndUsername = data.levelAndUsername.S;
-    result.currGroupId = data.currGroupId.N;
+    result.currGroupId = data.currGroupId.S;
     result.claimedReward = data.claimedReward.BOOL;
     result.joinedTournamentAt = data.joinedTournamentAt.S;
 

@@ -3,8 +3,7 @@ export interface IUser {
   countryCode: string;
   coins: number;
   level: number;
-  currGroupId: number;
+  currGroupId: string;
   claimedReward: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  joinedTournamentAt: string;
 }

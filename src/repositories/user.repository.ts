@@ -107,7 +107,7 @@ export class UserRepository {
         S: data.levelAndUsername,
       },
       currGroupId: {
-        N: String(data.currGroupId),
+        S: String(data.currGroupId),
       },
       claimedReward: {
         BOOL: Boolean(data.claimedReward),

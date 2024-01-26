@@ -14,7 +14,7 @@ import {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post('/register')
   @ApiResponse({
     status: 201,
     description: 'User is created successfully.',
@@ -35,7 +35,7 @@ export class AuthController {
     return await this.authService.register(registerDto);
   }
 
-  @Post('login')
+  @Post('/login')
   @ApiResponse({
     status: 201,
     description: 'Login successful.',

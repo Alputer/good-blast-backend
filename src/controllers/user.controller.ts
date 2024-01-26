@@ -30,7 +30,7 @@ export class UserController {
     status: 500,
     description: 'Internal server error, contact with backend team.',
   })
-  @Get(':username')
+  @Get('/:username')
   public async findUserByUsername(
     @Param('username') username: string,
   ): Promise<User> {
@@ -56,7 +56,7 @@ export class UserController {
     status: 500,
     description: 'Internal server error, contact with backend team.',
   })
-  @Get('me')
+  @Get('/me')
   public async findCurrentUser(@Req() req: IAuthorizedRequest): Promise<User> {
     const username = req.user.username;
     return await this.userService.findUserByUsername(username);

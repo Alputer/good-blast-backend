@@ -130,4 +130,8 @@ export class UserRepository {
       );
     }
   }
+
+  public getTableName(): string {
+    return this.tableName;
+  }
 }

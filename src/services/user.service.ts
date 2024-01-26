@@ -11,6 +11,7 @@ export class UserService {
     const newUser = await User.newInstanceFromDTO(registerDto);
     return this.userRepository.upsertOne(newUser);
   }
+
   public async findUserByUsername(username: string): Promise<User> {
     const user = await this.userRepository.findUserByUsername(username);
 
@@ -20,7 +21,18 @@ export class UserService {
 
     return user;
   }
+
   public async userWithUsernameExists(username: string): Promise<boolean> {
     return this.userRepository.userWithUsernameExists(username);
+  }
+
+  public async completeLevel(username: string): Promise<void> {
+    const user = await this.userRepository.findUserByUsername(username);
+
+    if (user.isInTournament) {
+      await this.userRepository.completeLevelWithScoreUpdate;
+    } else {
+      await this.userRepository.completeLevel(user);
+    }
   }
 }

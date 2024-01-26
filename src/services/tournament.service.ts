@@ -47,15 +47,22 @@ export class TournamentService {
       );
     }
 
+    if (user.isInTournament()) {
+      throw new BadRequestException('You are already in a tournament');
+    }
+
     if (!user.claimedReward) {
       throw new BadRequestException(
-        'You are already in a tournament or did not claim your reward from previous tournament',
+        'You should claim your reward from prevous tournament to participate in a tournament',
       );
     }
 
     let availableGroupInfo;
 
     let tryCount = 3;
+    // I try to add 3 times before throwing fail exceptin. In some rare cases, transaction may fail due to race conditions.
+    // However, if it fail 3 times in a row, it suggests another error.
+
     while (true) {
       if (tryCount <= 0)
         throw new InternalServerErrorException(
@@ -98,19 +105,16 @@ export class TournamentService {
       );
     }
 
+    if (user.isInTournament()) {
+      throw new BadRequestException(
+        'You cannot claim reward before the tournament ends',
+      );
+    }
+
     if (user.claimedReward) {
       throw new BadRequestException('You already claimed your reward');
     }
 
-    const tournamentGroup =
-      await this.tournamentGroupRepository.findTournamentGroupByGroupId(
-        groupId,
-      );
-
-    const tournament = await this.tournamentRepository.findTournamentById(tournamentGroup.tournamentId);
-    if(tournament.isOngoing){
-        throw new BadRequestException('You cannot claim reward before the tournament ends');
-    }
     //find rank and update
   }
 }

@@ -12,6 +12,7 @@ export class User {
   levelAndUsername: string; // Used for second GSI for ensuring uniqueness
   currGroupId: string;
   claimedReward: boolean;
+  joinedTournamentAt: string;
 
   public static async newInstanceFromDTO(data: RegisterDto) {
     const result = new User();
@@ -23,6 +24,7 @@ export class User {
     result.currGroupId = '';
     result.levelAndUsername = `0000001#${data.username}`;
     result.claimedReward = true;
+    result.joinedTournamentAt = '';
 
     return result;
   }
@@ -37,6 +39,7 @@ export class User {
     result.levelAndUsername = data.levelAndUsername.S;
     result.currGroupId = data.currGroupId.N;
     result.claimedReward = data.claimedReward.BOOL;
+    result.joinedTournamentAt = data.joinedTournamentAt.S;
 
     return result;
   }
@@ -47,5 +50,9 @@ export class User {
 
   public async compareEncryptedPassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
+  }
+
+  public isInTournament() {
+    return true; //Todo: Implement later
   }
 }

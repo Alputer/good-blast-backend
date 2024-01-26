@@ -43,7 +43,8 @@ export class TournamentController {
   })
   @ApiResponse({
     status: 400,
-    description: 'User already claimred his/her reward or tournament has not finished.',
+    description:
+      'User already claimed his/her reward or tournament has not finished.',
   })
   @ApiResponse({
     status: 401,
@@ -54,9 +55,7 @@ export class TournamentController {
     description: 'Internal server error, contact with backend team.',
   })
   @Post('/claim-reward')
-  public async claimReward(
-    @Req() req: IAuthorizedRequest,
-  ): Promise<void> {
+  public async claimReward(@Req() req: IAuthorizedRequest): Promise<void> {
     const user = req.user;
     return await this.tournamentService.claimReward(user.username);
   }

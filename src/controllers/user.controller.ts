@@ -1,4 +1,4 @@
-import { Controller, Param, Get, UseGuards, Req } from '@nestjs/common';
+import { Controller, Param, Get, Post, UseGuards, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../services';
 import { User } from '../entities';
@@ -60,5 +60,24 @@ export class UserController {
   public async findCurrentUser(@Req() req: IAuthorizedRequest): Promise<User> {
     const username = req.user.username;
     return await this.userService.findUserByUsername(username);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'Complete level request is successfully processed.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'You are not authenticated.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error, contact with backend team.',
+  })
+  @Post('/complete-level')
+  public async claimReward(@Req() req: IAuthorizedRequest): Promise<void> {
+    const user = req.user;
+    return await this.userService.completeLevel(user.username);
   }
 }

@@ -166,4 +166,8 @@ export class TournamentGroupRepository {
       );
     }
   }
+
+  public getTableName(): string {
+    return this.tableName;
+  }
 }

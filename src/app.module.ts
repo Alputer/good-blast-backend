@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import {
   AuthController,
   HealthController,
-  TorunamentController,
+  TournamentController,
   UserController,
 } from './controllers';
 import { AuthService, UserService, TournamentService } from './services';
@@ -25,7 +25,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     ScheduleModule.forRoot(),
   ],
-  controllers: [HealthController, AuthController, UserController, TorunamentController],
+  controllers: [HealthController, AuthController, UserController, TournamentController],
   providers: [AuthService, UserService, TournamentService, UserRepository, TournamentRepository, TournamentGroupRepository],
 })
 export class AppModule {}

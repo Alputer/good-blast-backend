@@ -1,20 +1,26 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
+  forwardRef,
 } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { Tournament, TournamentGroup } from '../entities';
 import {
   TournamentRepository,
   TournamentGroupRepository,
+  UserRepository,
 } from '../repositories';
-import { UserService } from '.';
+import { LeaderboardService, UserService } from '.';
 
 @Injectable()
 export class TournamentService {
   constructor(
     private readonly userService: UserService,
+    @Inject(forwardRef(() => LeaderboardService))
+    private readonly leaderboardService: LeaderboardService,
+    private readonly userRepository: UserRepository,
     private readonly tournamentRepository: TournamentRepository,
     private readonly tournamentGroupRepository: TournamentGroupRepository,
   ) {}
@@ -115,6 +121,22 @@ export class TournamentService {
       throw new BadRequestException('You already claimed your reward');
     }
 
-    //find rank and update
+    const rank = await this.leaderboardService.getRankOfUserByUserObject(user);
+
+    if (rank === 1) {
+      await this.userRepository.claimReward(user.username, 5000);
+    }
+    if (rank === 2) {
+      await this.userRepository.claimReward(user.username, 3000);
+    }
+    if (rank === 3) {
+      await this.userRepository.claimReward(user.username, 2000);
+    }
+    if (rank >= 4 && rank <= 10) {
+      await this.userRepository.claimReward(user.username, 1000);
+    }
+    if (rank > 10) {
+      await this.userRepository.claimReward(user.username, 0);
+    }
   }
 }

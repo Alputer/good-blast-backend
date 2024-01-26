@@ -10,6 +10,8 @@ import { LeaderboardService } from '../services';
 export class LeaderboardController {
   constructor(private readonly leaderboardService: LeaderboardService) {}
 
+
+  
   @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
@@ -24,10 +26,10 @@ export class LeaderboardController {
     description: 'Internal server error, contact with backend team.',
   })
   @Get('/tournament/my-rank')
-  public async enterTournament(
+  public async getMyTournamentRank(
     @Req() req: IAuthorizedRequest,
   ): Promise<number> {
     const user = req.user;
-    return await this.leaderboardService.getMyRank(user.username);
+    return await this.leaderboardService.getRankOfUserByUsername(user.username);
   }
 }

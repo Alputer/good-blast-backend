@@ -206,6 +206,21 @@ export class UserRepository {
     }
   }
 
+  public async claimReward(username: string, coinCount: number): Promise<void> {
+    const updateCommand = new UpdateItemCommand({
+      TableName: this.tableName,
+      Key: {
+        username: { S: username },
+      },
+      UpdateExpression:
+        'SET coins = coins + :coinsVal, claimedReward = :claimedRewardVal',
+      ExpressionAttributeValues: {
+        ':coinsVal': { N: String(coinCount) },
+        ':claimedRewardVal': { BOOL: true },
+      },
+    });
+  }
+
   public getTableName(): string {
     return this.tableName;
   }

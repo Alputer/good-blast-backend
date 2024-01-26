@@ -1,6 +1,3 @@
-import { RegisterDto } from '../dtos/auth';
-import { v4 as uuidv4 } from 'uuid';
-
 export class TournamentGroup {
   groupId: string; // partition key
   username: string; // sort key

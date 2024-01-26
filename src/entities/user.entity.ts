@@ -10,11 +10,8 @@ export class User {
   coins: number;
   level: number;
   levelAndUsername: string; // Used for second GSI for ensuring uniqueness
-  currGroupId: number;
-  isInTournament: boolean;
+  currGroupId: string;
   claimedReward: boolean;
-  createdAt: string;
-  updatedAt: string;
 
   public static async newInstanceFromDTO(data: RegisterDto) {
     const result = new User();
@@ -23,13 +20,9 @@ export class User {
     result.countryCode = data.countryCode;
     result.coins = 1000;
     result.level = 1;
-    result.currGroupId = -1;
+    result.currGroupId = '';
     result.levelAndUsername = `0000001#${data.username}`;
-    result.isInTournament = false;
     result.claimedReward = true;
-    const currentTime = new Date().toISOString();
-    result.createdAt = currentTime;
-    result.updatedAt = currentTime;
 
     return result;
   }
@@ -43,10 +36,7 @@ export class User {
     result.level = data.level.N;
     result.levelAndUsername = data.levelAndUsername.S;
     result.currGroupId = data.currGroupId.N;
-    result.isInTournament = data.isInTournament.BOOL;
     result.claimedReward = data.claimedReward.BOOL;
-    result.createdAt = data.createdAt.S;
-    result.updatedAt = data.updatedAt.S;
 
     return result;
   }

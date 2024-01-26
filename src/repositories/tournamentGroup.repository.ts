@@ -1,6 +1,7 @@
 import {
   AttributeValue,
   DynamoDBClient,
+  GetItemCommand,
   QueryCommand,
   QueryCommandOutput,
   TransactWriteItemsCommand,
@@ -49,6 +50,35 @@ export class TournamentGroupRepository {
     return result;
   }
 
+  public async findTournamentGroupByGroupId(
+    groupId: string,
+  ): Promise<TournamentGroup | undefined> {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: {
+        groupId: {
+          S: groupId,
+        },
+      },
+      ProjectionExpression: 'tournamentId',
+    });
+
+    try {
+      const result = await this.client.send(command);
+
+      if (result.Item) {
+        return TournamentGroup.newInstanceFromDynamoDBObject(result.Item);
+      }
+
+      return undefined;
+    } catch (error) {
+      console.error('Error finding tournament group with group id:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in findTournamentGroupByGroupId query',
+      );
+    }
+  }
+
   public async upsertOne(
     data: TournamentGroup,
     availableGroupItemCount: number,
@@ -83,10 +113,9 @@ export class TournamentGroupRepository {
               username: { S: data.username },
             },
             UpdateExpression:
-              'SET groupId = :newGroupId, claimedReward = :claimedRewardVal, isInTournament = :isInTournamentVal',
+              'SET groupId = :newGroupId, claimedReward = :claimedRewardVal',
             ExpressionAttributeValues: {
               ':newGroupId': { S: data.groupId },
-              ':isInTournamentVal': { BOOL: true },
               ':claimedRewardVal': { BOOL: false },
             },
           },

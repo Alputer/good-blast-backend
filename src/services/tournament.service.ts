@@ -47,15 +47,9 @@ export class TournamentService {
       );
     }
 
-    if (user.isInTournament) {
-        throw new BadRequestException(
-          'You are already in a tournament',
-        );
-      }
-
     if (!user.claimedReward) {
       throw new BadRequestException(
-        'You should claim your reward from previous tournament to participate in current tournament',
+        'You are already in a tournament or did not claim your reward from previous tournament',
       );
     }
 
@@ -93,5 +87,30 @@ export class TournamentService {
       tournamentId: availableGroupInfo.Items[0].id.S,
       tournamentScore: 0,
     };
+  }
+
+  public async claimReward(username: string) {
+    const user = await this.userService.findUserByUsername(username);
+    const groupId = user.currGroupId;
+    if (groupId === '') {
+      throw new BadRequestException(
+        'You did not participate in any tournament',
+      );
+    }
+
+    if (user.claimedReward) {
+      throw new BadRequestException('You already claimed your reward');
+    }
+
+    const tournamentGroup =
+      await this.tournamentGroupRepository.findTournamentGroupByGroupId(
+        groupId,
+      );
+
+    const tournament = await this.tournamentRepository.findTournamentById(tournamentGroup.tournamentId);
+    if(tournament.isOngoing){
+        throw new BadRequestException('You cannot claim reward before the tournament ends');
+    }
+    //find rank and update
   }
 }

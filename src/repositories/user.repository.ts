@@ -103,12 +103,6 @@ export class UserRepository {
       claimedReward: {
         BOOL: Boolean(data.claimedReward),
       },
-      createdAt: {
-        S: data.createdAt,
-      },
-      updatedAt: {
-        S: data.updatedAt,
-      },
     };
 
     const command = new PutItemCommand({

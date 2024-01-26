@@ -1,6 +1,7 @@
 import {
   AttributeValue,
   DynamoDBClient,
+  GetItemCommand,
   PutItemCommand,
   QueryCommand,
   QueryCommandOutput,
@@ -8,7 +9,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Tournament } from '../entities';
+import { Tournament, TournamentGroup } from '../entities';
 import { IsOngoing } from '../enums';
 
 @Injectable()
@@ -68,11 +69,40 @@ export class TournamentRepository {
       ExpressionAttributeValues: {
         ':val': { S: IsOngoing.TRUE },
       },
-      ProjectionExpression: 'id', // Replace with actual attribute names
+      ProjectionExpression: 'id',
       Limit: 1,
     });
     const result = await this.client.send(queryCommand);
     return result;
+  }
+
+  public async findTournamentById(
+    groupId: string,
+  ): Promise<Tournament | undefined> {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: {
+        groupId: {
+          S: groupId,
+        },
+      },
+      ProjectionExpression: 'id, isOngoing',
+    });
+
+    try {
+      const result = await this.client.send(command);
+
+      if (result.Item) {
+        return Tournament.newInstanceFromDynamoDBObject(result.Item);
+      }
+
+      return undefined;
+    } catch (error) {
+      console.error('Error finding tournament with id:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in findTournamentById query',
+      );
+    }
   }
 
   public async endActiveTournament(): Promise<void> {

@@ -113,10 +113,11 @@ export class TournamentGroupRepository {
               username: { S: data.username },
             },
             UpdateExpression:
-              'SET groupId = :newGroupId, claimedReward = :claimedRewardVal',
+              'SET groupId = :newGroupId, claimedReward = :claimedRewardVal, joinedTournamentAt = :joinedTournamentAtVal',
             ExpressionAttributeValues: {
               ':newGroupId': { S: data.groupId },
               ':claimedRewardVal': { BOOL: false },
+              ':joinedTournamentAtVal': { S: new Date().toISOString()},
             },
           },
         },

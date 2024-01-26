@@ -53,6 +53,15 @@ export class User {
   }
 
   public isInTournament() {
-    return true; //Todo: Implement later
+    if (this.joinedTournamentAt === '') return false;
+
+    const joinedTournamentAt = new Date(this.joinedTournamentAt);
+    const now = new Date();
+
+    return (
+      joinedTournamentAt.getUTCFullYear() === now.getUTCFullYear() &&
+      joinedTournamentAt.getUTCMonth() === now.getUTCMonth() &&
+      joinedTournamentAt.getUTCDate() === now.getUTCDate()
+    );
   }
 }

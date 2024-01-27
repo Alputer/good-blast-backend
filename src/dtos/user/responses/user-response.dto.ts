@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { Country } from '../../../enums';
+import { IsEnum } from 'class-validator';
 
 export class UserResponseDto {
   @ApiProperty()
@@ -8,6 +9,8 @@ export class UserResponseDto {
   username: string;
   @ApiProperty({ enum: Country })
   @Expose()
+  @IsEnum(Country)
+  @Type(() => String)
   countryCode: Country;
   @ApiProperty()
   @Expose()
@@ -17,14 +20,11 @@ export class UserResponseDto {
   level: number;
   @ApiProperty()
   @Expose()
-  currGroupId: number;
+  currGroupId: string;
   @ApiProperty()
   @Expose()
   claimedReward: boolean;
   @ApiProperty()
   @Expose()
-  createdAt: Date;
-  @ApiProperty()
-  @Expose()
-  updatedAt: Date;
+  joinedTournamentAt: string;
 }

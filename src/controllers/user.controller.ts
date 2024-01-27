@@ -1,9 +1,19 @@
-import { Controller, Param, Get, Post, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Get,
+  Post,
+  UseGuards,
+  Req,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../services';
 import { User } from '../entities';
 import { AuthGuard } from '../services/guards';
-import { IAuthorizedRequest } from '../interfaces';
+import { IAuthorizedRequest, IUser } from '../interfaces';
+import { UserResponseDto } from '../dtos/user/responses';
+import { SerializerInterceptor } from '../interceptors';
 
 @ApiBearerAuth()
 @Controller('/api/user')
@@ -12,6 +22,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard)
+  @UseInterceptors(new SerializerInterceptor(UserResponseDto))
   @ApiResponse({
     status: 200,
     description: 'User is fetched successfully.',
@@ -33,11 +44,12 @@ export class UserController {
   @Get('/:username')
   public async findUserByUsername(
     @Param('username') username: string,
-  ): Promise<User> {
+  ): Promise<UserResponseDto> {
     return await this.userService.findUserByUsername(username);
   }
 
   @UseGuards(AuthGuard)
+  @UseInterceptors(new SerializerInterceptor(UserResponseDto))
   @ApiResponse({
     status: 200,
     description: 'User is fetched successfully.',
@@ -57,7 +69,9 @@ export class UserController {
     description: 'Internal server error, contact with backend team.',
   })
   @Get('/me')
-  public async findCurrentUser(@Req() req: IAuthorizedRequest): Promise<User> {
+  public async findCurrentUser(
+    @Req() req: IAuthorizedRequest,
+  ): Promise<UserResponseDto> {
     const username = req.user.username;
     return await this.userService.findUserByUsername(username);
   }

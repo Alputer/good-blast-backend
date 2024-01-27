@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services';
 import {
@@ -7,6 +7,7 @@ import {
   RegisterResponseDto,
   LoginResponseDto,
 } from '../dtos/auth';
+import { SerializerInterceptor } from '../interceptors';
 
 @ApiBearerAuth()
 @Controller('/api/auth')
@@ -15,6 +16,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/register')
+  @UseInterceptors(new SerializerInterceptor(RegisterResponseDto))
   @ApiResponse({
     status: 201,
     description: 'User is created successfully.',
@@ -36,6 +38,7 @@ export class AuthController {
   }
 
   @Post('/login')
+  @UseInterceptors(new SerializerInterceptor(LoginResponseDto))
   @ApiResponse({
     status: 201,
     description: 'Login successful.',

@@ -1,18 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsObject, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type, Expose } from 'class-transformer';
-import { User } from '../../../entities';
+import { UserResponseDto } from '../../user/responses';
 
 export class RegisterResponseDto {
   @ApiProperty({
     description: 'User information',
-    type: User,
+    type: UserResponseDto,
   })
   @IsObject()
   @ValidateNested()
   @Expose()
-  @Type(() => User)
-  user: User;
+  @Type(() => UserResponseDto)
+  user: UserResponseDto;
 
   @ApiProperty({
     description:

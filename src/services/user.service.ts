@@ -30,7 +30,10 @@ export class UserService {
     const user = await this.userRepository.findUserByUsername(username);
     const newLevelAndUsername = this.incrementLevel(user.levelAndUsername);
     if (user.isInTournament) {
-      await this.userRepository.completeLevelWithScoreUpdate(user, newLevelAndUsername);
+      await this.userRepository.completeLevelWithScoreUpdate(
+        user,
+        newLevelAndUsername,
+      );
     } else {
       await this.userRepository.completeLevel(user, newLevelAndUsername);
     }

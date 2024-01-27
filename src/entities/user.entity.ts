@@ -1,3 +1,4 @@
+import { Country } from '../enums';
 import { RegisterDto } from '../dtos/auth';
 import * as bcrypt from 'bcrypt';
 
@@ -6,7 +7,7 @@ const SALT_ROUNDS = 10;
 export class User {
   username: string;
   password: string;
-  countryCode: string;
+  countryCode: Country;
   coins: number;
   level: number;
   levelAndUsername: string; // Used for second GSI for ensuring uniqueness

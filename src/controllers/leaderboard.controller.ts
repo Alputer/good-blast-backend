@@ -1,10 +1,5 @@
-import {
-  Controller,
-  Get,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../services/guards';
 import { IAuthorizedRequest } from '../interfaces';
 import { LeaderboardService } from '../services';
@@ -29,11 +24,28 @@ export class LeaderboardController {
     description: 'Internal server error, contact with backend team.',
   })
   @Get('/global')
-  public async getGlobalLeaderboard(
-    @Req() req: IAuthorizedRequest,
-  ): Promise<number> {
-    const user = req.user;
+  public async getGlobalLeaderboard(): Promise<any> {
     return await this.leaderboardService.getGlobalLeaderboard();
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Country leaderboard is returned successfully.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'You are not authenticated.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error, contact with backend team.',
+  })
+  @Get('/country/:countryCode')
+  public async getCountryLeaderboard(
+    @Param('countryCode') countryCode: string,
+  ): Promise<any> {
+    return await this.leaderboardService.getCountryLeaderboard(countryCode);
   }
 
   @UseGuards(AuthGuard)
@@ -52,7 +64,7 @@ export class LeaderboardController {
   @Get('/tournament')
   public async getTournamentLeaderboard(
     @Req() req: IAuthorizedRequest,
-  ): Promise<number> {
+  ): Promise<any> {
     const user = req.user;
     return await this.leaderboardService.getTournamentLeaderboard(
       user.username,

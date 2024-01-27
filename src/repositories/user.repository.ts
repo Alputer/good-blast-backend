@@ -158,6 +158,29 @@ export class UserRepository {
     }
   }
 
+  public async getCountryLeaderboard(countryCode: string): Promise<any> {
+    const queryCommand = new QueryCommand({
+      TableName: 'Users',
+      IndexName: 'CountryCodeGSI',
+      KeyConditionExpression: 'countryCode = :val',
+      ExpressionAttributeValues: {
+        ':val': { S: countryCode },
+      },
+      Limit: 1000,
+      ScanIndexForward: false,
+    });
+
+    try {
+      const response = await this.client.send(queryCommand);
+      return response.Items;
+    } catch (error) {
+      console.error('Error in get global leaderboard request:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in getGlobalLeaderboard query',
+      );
+    }
+  }
+
   public async completeLevel(user: User): Promise<void> {
     const updateCommand = new UpdateItemCommand({
       TableName: this.tableName,

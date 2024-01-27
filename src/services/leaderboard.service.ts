@@ -16,6 +16,12 @@ export class LeaderboardService {
     return users;
   }
 
+  public async getCountryLeaderboard(countryCode: string) {
+    const users = await this.userRepository.getCountryLeaderboard(countryCode);
+
+    return users;
+  }
+
   public async getTournamentLeaderboard(username: string) {
     const user = await this.userRepository.findUserByUsername(username);
 

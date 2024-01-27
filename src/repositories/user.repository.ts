@@ -17,6 +17,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { User } from '../entities';
 import { TournamentGroupRepository } from '.';
+import { GlobalLeaderboardResponseDto, CountryLeaderboardResponseDto } from '../dtos/leaderboard/responses';
 
 @Injectable()
 export class UserRepository {
@@ -141,7 +142,7 @@ export class UserRepository {
     }
   }
 
-  public async getGlobalLeaderboard(): Promise<any> {
+  public async getGlobalLeaderboard(): Promise<GlobalLeaderboardResponseDto[]> {
     const queryCommand = new QueryCommand({
       TableName: 'Users',
       IndexName: 'LevelGSI',
@@ -149,13 +150,17 @@ export class UserRepository {
       ExpressionAttributeValues: {
         ':dpk': { S: '_' },
       },
+      ProjectionExpression: 'username, levelNum',
       Limit: 1000,
       ScanIndexForward: false,
     });
 
     try {
       const response = await this.client.send(queryCommand);
-      return response.Items;
+      return response.Items.map((item) => ({
+        levelNum: item.levelNum.N,
+        username: item.username.S,
+      }));
     } catch (error) {
       console.error('Error in get global leaderboard request:', error);
       throw new InternalServerErrorException(
@@ -164,7 +169,7 @@ export class UserRepository {
     }
   }
 
-  public async getCountryLeaderboard(countryCode: string): Promise<any> {
+  public async getCountryLeaderboard(countryCode: string): Promise<CountryLeaderboardResponseDto[]> {
     const queryCommand = new QueryCommand({
       TableName: 'Users',
       IndexName: 'CountryCodeGSI',
@@ -172,13 +177,17 @@ export class UserRepository {
       ExpressionAttributeValues: {
         ':val': { S: countryCode },
       },
+      ProjectionExpression: 'username, levelNum',
       Limit: 1000,
       ScanIndexForward: false,
     });
 
     try {
       const response = await this.client.send(queryCommand);
-      return response.Items;
+      return response.Items.map((item) => ({
+        levelNum: item.levelNum.N,
+        username: item.username.S,
+      }));
     } catch (error) {
       console.error('Error in get global leaderboard request:', error);
       throw new InternalServerErrorException(

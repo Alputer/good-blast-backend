@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { TournamentGroupRepository, UserRepository } from '../repositories';
 import { SortOption } from '../enums';
 import { IUser } from '../interfaces';
+import { GlobalLeaderboardResponseDto, TournamentLeaderboardResponseDto } from '../dtos/leaderboard/responses';
 
 @Injectable()
 export class LeaderboardService {
@@ -10,7 +11,7 @@ export class LeaderboardService {
     public readonly userRepository: UserRepository,
   ) {}
 
-  public async getGlobalLeaderboard() {
+  public async getGlobalLeaderboard(): Promise<GlobalLeaderboardResponseDto[]>{
     const users = await this.userRepository.getGlobalLeaderboard();
 
     return users;
@@ -22,7 +23,7 @@ export class LeaderboardService {
     return users;
   }
 
-  public async getTournamentLeaderboard(username: string) {
+  public async getTournamentLeaderboard(username: string): Promise<TournamentLeaderboardResponseDto[]> {
     const user = await this.userRepository.findUserByUsername(username);
 
     if (user.currGroupId === '') {
@@ -58,9 +59,9 @@ export class LeaderboardService {
         user.currGroupId,
         SortOption.NO_SORT,
       );
-    const userScore = members.findIndex(
+    const userScore = members[members.findIndex(
       (item) => item.username === user.username,
-    ).tournamentScore;
+    )].tournamentScore;
 
     let rank = 1; // calculate the rank of user in the group
     for (let member of members) {

@@ -3,6 +3,11 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../services/guards';
 import { IAuthorizedRequest } from '../interfaces';
 import { LeaderboardService } from '../services';
+import {
+  GlobalLeaderboardResponseDto,
+  MyRankResponseDto,
+  TournamentLeaderboardResponseDto,
+} from '../dtos/leaderboard/responses';
 
 @ApiBearerAuth()
 @Controller('/api/leaderboard')
@@ -24,7 +29,7 @@ export class LeaderboardController {
     description: 'Internal server error, contact with backend team.',
   })
   @Get('/global')
-  public async getGlobalLeaderboard(): Promise<any> {
+  public async getGlobalLeaderboard(): Promise<GlobalLeaderboardResponseDto[]> {
     return await this.leaderboardService.getGlobalLeaderboard();
   }
 
@@ -64,7 +69,7 @@ export class LeaderboardController {
   @Get('/tournament')
   public async getTournamentLeaderboard(
     @Req() req: IAuthorizedRequest,
-  ): Promise<any> {
+  ): Promise<TournamentLeaderboardResponseDto[]> {
     const user = req.user;
     return await this.leaderboardService.getTournamentLeaderboard(
       user.username,
@@ -87,8 +92,12 @@ export class LeaderboardController {
   @Get('/tournament/my-rank')
   public async getMyTournamentRank(
     @Req() req: IAuthorizedRequest,
-  ): Promise<number> {
+  ): Promise<MyRankResponseDto> {
     const user = req.user;
-    return await this.leaderboardService.getRankOfUserByUsername(user.username);
+    return {
+      rank: await this.leaderboardService.getRankOfUserByUsername(
+        user.username,
+      ),
+    };
   }
 }

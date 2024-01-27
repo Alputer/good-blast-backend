@@ -14,11 +14,10 @@ export class TournamentGroup {
     return result;
   }
 
-  public static newInstanceFromDynamoDBObjectWithoutTournamentId(
+  public static newInstanceFromDynamoDBObjectWithoutTournamentAndGroupId(
     data: any,
   ): TournamentGroup {
     const result = new TournamentGroup();
-    result.groupId = data.groupId.S;
     result.username = data.username.S;
     result.tournamentScore = data.tournamentScore.N;
 

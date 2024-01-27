@@ -13,6 +13,7 @@ import { TournamentRepository } from './tournament.repository';
 import { IsOngoing, SortOption } from '../enums';
 import { UserRepository } from './user.repository';
 import { v4 as uuidv4 } from 'uuid';
+import { TournamentLeaderboardResponseDto } from '../dtos/leaderboard/responses';
 
 @Injectable()
 export class TournamentGroupRepository {
@@ -60,14 +61,14 @@ export class TournamentGroupRepository {
   public async getGroupMembersByGroupId(
     groupId: string,
     sortOption: SortOption,
-  ): Promise<any> {
+  ): Promise<TournamentLeaderboardResponseDto[]> {
     const queryCommand = new QueryCommand({
       TableName: this.tableName,
       KeyConditionExpression: 'groupId = :groupId',
       ExpressionAttributeValues: {
         ':groupId': { S: groupId },
       },
-      ProjectionExpression: 'groupId, username, tournamentScore',
+      ProjectionExpression: 'username, tournamentScore',
     });
 
     try {
@@ -75,7 +76,7 @@ export class TournamentGroupRepository {
 
       if (queryResult.Items && queryResult.Items.length > 0) {
         const result = queryResult.Items.map((item) =>
-          TournamentGroup.newInstanceFromDynamoDBObjectWithoutTournamentId(
+          TournamentGroup.newInstanceFromDynamoDBObjectWithoutTournamentAndGroupId(
             item,
           ),
         );

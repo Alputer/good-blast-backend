@@ -181,17 +181,21 @@ export class UserRepository {
     }
   }
 
-  public async completeLevel(user: User): Promise<void> {
+  public async completeLevel(
+    user: User,
+    newLevelAndUsername: string,
+  ): Promise<void> {
     const updateCommand = new UpdateItemCommand({
       TableName: this.tableName,
       Key: {
         username: { S: user.username },
       },
       UpdateExpression:
-        'SET coins = coins + :coinsVal, level = level + :levelVal',
+        'SET coins = coins + :coinsVal, level = level + :levelVal, levelAndUsername = :newLevelAndUsernameVal',
       ExpressionAttributeValues: {
         ':coinsVal': { N: '100' },
         ':levelVal': { N: '1' },
+        ':newLevelAndUsernameVal': { S: newLevelAndUsername },
       },
     });
 
@@ -208,7 +212,10 @@ export class UserRepository {
     }
   }
 
-  public async completeLevelWithScoreUpdate(user: User): Promise<void> {
+  public async completeLevelWithScoreUpdate(
+    user: User,
+    newLevelAndUsername: string,
+  ): Promise<void> {
     const transactionCommand = new TransactWriteItemsCommand({
       TransactItems: [
         {
@@ -218,10 +225,11 @@ export class UserRepository {
               username: { S: user.username },
             },
             UpdateExpression:
-              'SET coins = coins + :coinsVal, level = level + :levelVal',
+              'SET coins = coins + :coinsVal, level = level + :levelVal, levelAndUsername = :newLevelAndUsernameVal',
             ExpressionAttributeValues: {
               ':coinsVal': { N: '100' },
               ':levelVal': { N: '1' },
+              ':newLevelAndUsernameVal': { S: newLevelAndUsername },
             },
           },
         },

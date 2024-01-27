@@ -28,11 +28,18 @@ export class UserService {
 
   public async completeLevel(username: string): Promise<void> {
     const user = await this.userRepository.findUserByUsername(username);
-
+    const newLevelAndUsername = this.incrementLevel(user.levelAndUsername);
     if (user.isInTournament) {
-      await this.userRepository.completeLevelWithScoreUpdate;
+      await this.userRepository.completeLevelWithScoreUpdate(user, newLevelAndUsername);
     } else {
-      await this.userRepository.completeLevel(user);
+      await this.userRepository.completeLevel(user, newLevelAndUsername);
     }
+  }
+  public incrementLevel(input: string): string {
+    const parts = input.split('#');
+    let level = parseInt(parts[0]);
+    level += 1;
+    const levelStr = level.toString().padStart(7, '0');
+    return `${levelStr}#${parts[1]}`;
   }
 }

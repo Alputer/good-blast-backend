@@ -4,6 +4,7 @@ import { TournamentService } from '../services';
 import { AuthGuard } from '../services/guards';
 import { IAuthorizedRequest } from '../interfaces';
 import { TournamentGroup } from '../entities';
+import { ClaimRewardResponseDto } from '../dtos/tournament/responses';
 
 @ApiBearerAuth()
 @Controller('/api/tournament')
@@ -55,8 +56,9 @@ export class TournamentController {
     description: 'Internal server error, contact with backend team.',
   })
   @Post('/claim-reward')
-  public async claimReward(@Req() req: IAuthorizedRequest): Promise<void> {
+  public async claimReward(@Req() req: IAuthorizedRequest): Promise<ClaimRewardResponseDto> {
     const user = req.user;
-    return await this.tournamentService.claimReward(user.username);
+    await this.tournamentService.claimReward(user.username);
+    return { message: 'Your reward claim is successfully processed.' };
   }
 }

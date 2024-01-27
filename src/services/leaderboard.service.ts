@@ -25,6 +25,12 @@ export class LeaderboardService {
   public async getTournamentLeaderboard(username: string) {
     const user = await this.userRepository.findUserByUsername(username);
 
+    if (user.currGroupId === '') {
+      throw new BadRequestException(
+        'User did not participate in any tournament yet',
+      );
+    }
+
     const membersSorted =
       await this.tournamentGroupRepository.getGroupMembersByGroupId(
         user.currGroupId,

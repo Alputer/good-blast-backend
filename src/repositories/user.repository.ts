@@ -3,6 +3,7 @@ import {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
+  QueryCommand,
   TransactWriteItemsCommand,
   UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb';
@@ -134,6 +135,29 @@ export class UserRepository {
     }
   }
 
+  public async getGlobalLeaderboard(): Promise<any> {
+    const queryCommand = new QueryCommand({
+      TableName: 'Users',
+      IndexName: 'LevelGSI',
+      KeyConditionExpression: 'dummyPartitionKey = :dpk',
+      ExpressionAttributeValues: {
+        ':dpk': { S: '_' },
+      },
+      Limit: 1000,
+      ScanIndexForward: false,
+    });
+
+    try {
+      const response = await this.client.send(queryCommand);
+      return response.Items;
+    } catch (error) {
+      console.error('Error in get global leaderboard request:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in getGlobalLeaderboard query',
+      );
+    }
+  }
+
   public async completeLevel(user: User): Promise<void> {
     const updateCommand = new UpdateItemCommand({
       TableName: this.tableName,
@@ -219,6 +243,15 @@ export class UserRepository {
         ':claimedRewardVal': { BOOL: true },
       },
     });
+
+    try {
+      await this.client.send(updateCommand);
+    } catch (error) {
+      console.error('Error updating user during claim reward request:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in claimReward query',
+      );
+    }
   }
 
   public getTableName(): string {

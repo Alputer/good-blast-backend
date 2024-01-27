@@ -10,6 +10,12 @@ export class LeaderboardService {
     public readonly userRepository: UserRepository,
   ) {}
 
+  public async getGlobalLeaderboard() {
+    const users = await this.userRepository.getGlobalLeaderboard();
+
+    return users;
+  }
+
   public async getTournamentLeaderboard(username: string) {
     const user = await this.userRepository.findUserByUsername(username);
 

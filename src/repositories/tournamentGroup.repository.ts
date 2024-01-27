@@ -46,8 +46,15 @@ export class TournamentGroupRepository {
       ProjectionExpression: 'id, availableGroupId, availableGroupItemCount', // Replace with actual attribute names
       Limit: 1,
     });
-    const result = await this.client.send(queryCommand);
-    return result;
+    try {
+      const result = await this.client.send(queryCommand);
+      return result;
+    } catch (error) {
+      console.error('Error finding available group:', error);
+      throw new InternalServerErrorException(
+        'Internal Server Error in findAvailableGroup transaction',
+      );
+    }
   }
 
   public async getGroupMembersByGroupId(

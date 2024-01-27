@@ -13,6 +13,7 @@ export class User {
   currGroupId: string;
   claimedReward: boolean;
   joinedTournamentAt: string;
+  dummyPartitionKey: string;
 
   public static async newInstanceFromDTO(data: RegisterDto) {
     const result = new User();
@@ -25,6 +26,7 @@ export class User {
     result.levelAndUsername = `0000001#${data.username}`;
     result.claimedReward = true;
     result.joinedTournamentAt = '';
+    result.dummyPartitionKey = '_';
 
     return result;
   }
@@ -40,6 +42,7 @@ export class User {
     result.currGroupId = data.currGroupId.S;
     result.claimedReward = data.claimedReward.BOOL;
     result.joinedTournamentAt = data.joinedTournamentAt.S;
+    result.dummyPartitionKey = data.dummyPartitionKey.S;
 
     return result;
   }

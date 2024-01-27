@@ -17,7 +17,7 @@ export class UserResponseDto {
   coins: number;
   @ApiProperty()
   @Expose()
-  level: number;
+  levelNum: number;
   @ApiProperty()
   @Expose()
   currGroupId: string;

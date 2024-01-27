@@ -41,7 +41,7 @@ export class TournamentService {
       );
     }
 
-    if (user.level < 10) {
+    if (user.levelNum < 10) {
       throw new BadRequestException(
         'You should complete at least 10 level to participate in a tournament',
       );

@@ -9,7 +9,7 @@ export class User {
   password: string;
   countryCode: Country;
   coins: number;
-  level: number;
+  levelNum: number;
   levelAndUsername: string; // Used for second GSI for ensuring uniqueness
   currGroupId: string;
   claimedReward: boolean;
@@ -22,7 +22,7 @@ export class User {
     result.password = await result.getEncryptedPassword(data.password);
     result.countryCode = data.countryCode;
     result.coins = 1000;
-    result.level = 1;
+    result.levelNum = 1;
     result.currGroupId = '';
     result.levelAndUsername = `0000001#${data.username}`;
     result.claimedReward = true;
@@ -38,7 +38,7 @@ export class User {
     result.password = data.password.S;
     result.countryCode = data.countryCode.S;
     result.coins = data.coins.N;
-    result.level = data.level.N;
+    result.levelNum = data.levelNum.N;
     result.levelAndUsername = data.levelAndUsername.S;
     result.currGroupId = data.currGroupId.S;
     result.claimedReward = data.claimedReward.BOOL;

@@ -101,8 +101,8 @@ export class UserRepository {
       coins: {
         N: String(data.coins),
       },
-      level: {
-        N: String(data.level),
+      levelNum: {
+        N: String(data.levelNum),
       },
       levelAndUsername: {
         S: data.levelAndUsername,
@@ -197,10 +197,10 @@ export class UserRepository {
         username: { S: user.username },
       },
       UpdateExpression:
-        'SET coins = coins + :coinsVal, level = level + :levelVal, levelAndUsername = :newLevelAndUsernameVal',
+        'SET coins = coins + :coinsVal, levelNum = levelNum + :levelNumVal, levelAndUsername = :newLevelAndUsernameVal',
       ExpressionAttributeValues: {
         ':coinsVal': { N: '100' },
-        ':levelVal': { N: '1' },
+        ':levelNumVal': { N: '1' },
         ':newLevelAndUsernameVal': { S: newLevelAndUsername },
       },
     });
@@ -231,10 +231,10 @@ export class UserRepository {
               username: { S: user.username },
             },
             UpdateExpression:
-              'SET coins = coins + :coinsVal, level = level + :levelVal, levelAndUsername = :newLevelAndUsernameVal',
+              'SET coins = coins + :coinsVal, levelNum = levelNum + :levelNumVal, levelAndUsername = :newLevelAndUsernameVal',
             ExpressionAttributeValues: {
               ':coinsVal': { N: '100' },
-              ':levelVal': { N: '1' },
+              ':levelNumVal': { N: '1' },
               ':newLevelAndUsernameVal': { S: newLevelAndUsername },
             },
           },

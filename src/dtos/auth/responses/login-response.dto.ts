@@ -19,5 +19,6 @@ export class LoginResponseDto {
       'This value should be included in the authorization header of the next requests.',
   })
   @IsNotEmpty()
+  @Expose()
   accessToken: string;
 }

@@ -113,6 +113,12 @@ export class UserRepository {
       claimedReward: {
         BOOL: Boolean(data.claimedReward),
       },
+      joinedTournamentAt: {
+        S: data.joinedTournamentAt,
+      },
+      dummyPartitionKey: {
+        S: data.dummyPartitionKey,
+      },
     };
 
     const command = new PutItemCommand({

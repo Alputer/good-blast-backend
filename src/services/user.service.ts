@@ -29,7 +29,7 @@ export class UserService {
   public async completeLevel(username: string): Promise<void> {
     const user = await this.userRepository.findUserByUsername(username);
     const newLevelAndUsername = this.incrementLevel(user.levelAndUsername);
-    if (user.isInTournament) {
+    if (user.isInTournament()) {
       await this.userRepository.completeLevelWithScoreUpdate(
         user,
         newLevelAndUsername,

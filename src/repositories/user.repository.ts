@@ -244,6 +244,7 @@ export class UserRepository {
             TableName: this.tournamentGroupRepository.getTableName(),
             Key: {
               groupId: { S: user.currGroupId },
+              username: { S: user.username },
             },
             UpdateExpression: 'SET tournamentScore = tournamentScore + :val',
             ExpressionAttributeValues: {

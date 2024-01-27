@@ -40,6 +40,12 @@ export class TournamentRepository {
       duration: {
         N: String(data.duration),
       },
+      availableGroupId: {
+        S: data.availableGroupId,
+      },
+      availableGroupItemCount: {
+        N: String(data.availableGroupItemCount),
+      },
       isOngoing: {
         S: data.isOngoing,
       },

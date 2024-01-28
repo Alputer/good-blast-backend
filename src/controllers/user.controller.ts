@@ -5,6 +5,7 @@ import {
   Post,
   UseGuards,
   Req,
+  HttpCode,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -77,8 +78,9 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Complete level request is successfully processed.',
   })
   @ApiResponse({

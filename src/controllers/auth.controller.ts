@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services';
 import {
@@ -38,9 +44,10 @@ export class AuthController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   @UseInterceptors(new SerializerInterceptor(LoginResponseDto))
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Login successful.',
     type: LoginResponseDto,
   })

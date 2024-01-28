@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Req, Post } from '@nestjs/common';
+import { Controller, UseGuards, Req, Post, HttpCode } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TournamentService } from '../services';
 import { AuthGuard } from '../services/guards';
@@ -13,8 +13,9 @@ export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
 
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'User joined the tournament successfully.',
   })
   @ApiResponse({
@@ -38,8 +39,9 @@ export class TournamentController {
   }
 
   @UseGuards(AuthGuard)
+  @HttpCode(200)
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'User claimed his/her reward successfully.',
   })
   @ApiResponse({
@@ -56,7 +58,9 @@ export class TournamentController {
     description: 'Internal server error, contact with backend team.',
   })
   @Post('/claim-reward')
-  public async claimReward(@Req() req: IAuthorizedRequest): Promise<ClaimRewardResponseDto> {
+  public async claimReward(
+    @Req() req: IAuthorizedRequest,
+  ): Promise<ClaimRewardResponseDto> {
     const user = req.user;
     await this.tournamentService.claimReward(user.username);
     return { message: 'Your reward claim is successfully processed.' };

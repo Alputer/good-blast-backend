@@ -19,7 +19,7 @@ export class TournamentGroup {
   ): TournamentGroup {
     const result = new TournamentGroup();
     result.username = data.username.S;
-    result.tournamentScore = data.tournamentScore.N;
+    result.tournamentScore = parseInt(data.tournamentScore.N);
 
     return result;
   }

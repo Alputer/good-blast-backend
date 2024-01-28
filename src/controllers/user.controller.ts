@@ -92,8 +92,13 @@ export class UserController {
     description: 'Internal server error, contact with backend team.',
   })
   @Post('/complete-level')
-  public async claimReward(@Req() req: IAuthorizedRequest): Promise<void> {
+  public async claimReward(
+    @Req() req: IAuthorizedRequest,
+  ): Promise<{ message: string }> {
     const user = req.user;
-    return await this.userService.completeLevel(user.username);
+    await this.userService.completeLevel(user.username);
+    return {
+      message: 'Your complete level request is successfully processed.',
+    };
   }
 }

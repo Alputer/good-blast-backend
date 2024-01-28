@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseEnumPipe,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../services/guards';
 import { IAuthorizedRequest } from '../interfaces';
@@ -8,6 +15,7 @@ import {
   MyRankResponseDto,
   TournamentLeaderboardResponseDto,
 } from '../dtos/leaderboard/responses';
+import { Country } from '../enums';
 
 @ApiBearerAuth()
 @Controller('/api/leaderboard')
@@ -48,7 +56,7 @@ export class LeaderboardController {
   })
   @Get('/country/:countryCode')
   public async getCountryLeaderboard(
-    @Param('countryCode') countryCode: string,
+    @Param('countryCode', new ParseEnumPipe(Country)) countryCode: Country,
   ): Promise<any> {
     return await this.leaderboardService.getCountryLeaderboard(countryCode);
   }

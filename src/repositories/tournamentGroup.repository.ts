@@ -159,10 +159,11 @@ export class TournamentGroupRepository {
               username: { S: data.username },
             },
             UpdateExpression:
-              'SET currGroupId = :newGroupId, claimedReward = :claimedRewardVal, joinedTournamentAt = :joinedTournamentAtVal',
+              'SET currGroupId = :newGroupId, claimedReward = :claimedRewardVal, coins = coins - :coinsVal, joinedTournamentAt = :joinedTournamentAtVal',
             ExpressionAttributeValues: {
               ':newGroupId': { S: data.groupId },
               ':claimedRewardVal': { BOOL: false },
+              ':coinsVal': { N: '500' },
               ':joinedTournamentAtVal': { S: new Date().toISOString() },
             },
           },

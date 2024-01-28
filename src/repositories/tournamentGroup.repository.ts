@@ -82,9 +82,9 @@ export class TournamentGroupRepository {
         );
         if (sortOption === SortOption.NO_SORT) return result;
         if (sortOption === SortOption.DESC)
-          return result.sort((a, b) => a.tournamentScore - b.tournamentScore);
-        if (sortOption === SortOption.ASC)
           return result.sort((a, b) => b.tournamentScore - a.tournamentScore);
+        if (sortOption === SortOption.ASC)
+          return result.sort((a, b) => a.tournamentScore - b.tournamentScore);
       }
 
       return undefined;

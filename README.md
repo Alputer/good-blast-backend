@@ -11,6 +11,11 @@
 - App url: [http://3.79.253.161](http://3.79.253.161)
 - Swagger documentation: [http://3.79.253.161/docs](http://3.79.253.161/docs) (There might be minor inconsistencies between api and the documentation)
 
+## USERS
+
+- Currently, there are 191 users in the system with some progress.
+- You can find their credentials in "user_credentials.txt" file to test the system with a user with some progress. You can also create a new user and test the system from scratch.
+
 ## HOW TO RUN THE CODE IN LOCAL DEVELOPMENT ENVIRONMENT
 
 Dependencies: Docker.
@@ -109,7 +114,7 @@ This index is used to store users in a sorted manner based on their levels for e
 ## FUTURE WORK
 
 1. **Integrating Redis**: Especially for `GET /api/leaderboard/global` and `GET /api/leaderboard/country/:countryCode` endpoints,  we can utilize caching to improve speed and reduce database load.
-2. **Add Rate-Limiting**: In order to prevent attacks, we can put a throttler for each endpoint.
+2. **Adding Rate-Limiting**: In order to prevent attacks, we can put a throttler for each endpoint.
 3. **Adding Unit Tests**: I could not implement unit tests in the given time. However, they are crucial for robust systems, therefore they should be definitely added.
-
+4. **Adding Pagination**: For `GET /api/leaderboard/global` and `GET /api/leaderboard/country/:countryCode` endpoints, there should be pagination.
 

@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "722c9201-4265-43f6-816e-91a530441be8",
+		"name": "GoodBlast",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16516256"
+	},
+	"item": [
+		{
+			"name": "Healthcheck",
+			"item": [
+				{
+					"name": "Healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/healthcheck",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"SilentDeath07\",\n    \"password\": \"pass123\",\n    \"countryCode\": \"TR\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE}}/api/auth/register",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"accessToken\", pm.response.json().accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"SilentDeath07\",\n    \"password\": \"pass123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE}}/api/auth/login",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get user by username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/user/:username",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"user",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "SilentDeath07"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/user/me",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Level",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/user/complete-level",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"complete-level"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leaderboard",
+			"item": [
+				{
+					"name": "Get global leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/leaderboard/global",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"global"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get country leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/leaderboard/country/:countryCode",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leaderboard",
+								"country",
+								":countryCode"
+							],
+							"variable": [
+								{
+									"key": "countryCode",
+									"value": "U"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my tournament group leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/leaderboard/tournament",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"tournament"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my tournament  rank",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/leaderboard/tournament/my-rank",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"leaderboard",
+								"tournament",
+								"my-rank"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tournament",
+			"item": [
+				{
+					"name": "Enter tournament",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/tournament/enter",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"tournament",
+								"enter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Claim tournament reward",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE}}/api/tournament/claim-reward",
+							"host": [
+								"{{BASE}}"
+							],
+							"path": [
+								"api",
+								"tournament",
+								"claim-reward"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE",
+			"value": "http://3.79.253.161",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		}
+	]
+}
